@@ -29,6 +29,9 @@ Plugin 'garbas/vim-snipmate'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'honza/vim-snippets'
 Plugin 'mileszs/ack.vim'
+Plugin 'klen/python-mode'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'christoomey/vim-tmux-navigator'
 
 " Colors
 Plugin 'nanotech/jellybeans.vim'
@@ -94,10 +97,11 @@ nnoremap U <C-r>
 " nnoremap <silent> gk :WriteBufferIfNecessary<CR>:wincmd k<CR>
 " nnoremap <silent> <M-k> :wincmd k<CR>
 " nnoremap <silent> gl :WriteBufferIfNecessary<CR>:wincmd l<CR>
-nmap <silent> <A-Up> :wincmd k<CR>
-nmap <silent> <A-Down> :wincmd j<CR>
-nmap <silent> <A-Left> :wincmd h<CR>
-nmap <silent> <A-Right> :wincmd l<CR>
+
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
 
 "   4 Window Splits
 "
@@ -116,6 +120,9 @@ nnoremap <silent> gp :wincmd p<CR>
 nnoremap <silent> g= :wincmd =<CR>
 " Swap Windows
 nnoremap <silent> gx :wincmd x<CR>
+
+set splitbelow      "More natural way to create a new window
+set splitright
 
 " ---------------
 " Leader Mappings
@@ -153,6 +160,7 @@ nnoremap <silent> <leader>vs :vsplit<Bar>:wincmd l<CR>
 " Using the built-in explore function
 map <leader>k :Explore<CR>
 let g:newtr_liststyle=3
+let g:netrw_list_hide='\.pyc$'
 
 " ---------------------------------------------
 " Regular Vim Configuration (No Plugins Needed)
@@ -195,9 +203,9 @@ set cursorline     " Highlight current line
 set showcmd        " Show the (partial) command as it’s being typed
 set lcs=tab:▸\ ,trail:·,nbsp:_    " Show “invisible” characters
 set list
-if exists('+colorcolumn')
-  set colorcolumn=80 " Color the 80th column differently as a wrapping guide.
-endif
+" if exists('+colorcolumn')
+"   set colorcolumn=80 " Color the 80th column differently as a wrapping guide.
+" endif
 " Disable tooltips for hovering keywords in Vim
 if exists('+ballooneval')
   " This doesn't seem to stop tooltips for Ruby files
@@ -218,7 +226,6 @@ set history=768        " Number of things to remember in history.
 set cf                 " Enable error files & error jumping.
 set clipboard+=unnamed " Yanks go on clipboard instead.
 set autowrite          " Writes on make/shell commands
-" set timeoutlen=450     " Time to wait for a command (after leader for example).
 set ttimeout
 set ttimeoutlen=100    " Time to wait for a command (after leader for example).
 set nofoldenable       " Disable folding entirely.
@@ -234,6 +241,8 @@ set backspace=indent,eol,start " Allow backspace in insert mode
 set ttyfast            " Optimize for fast terminal connections
 set gdefault           " Add the g flag to search/replace by default
 set shortmess=atI      " Don’t show the intro message when starting Vim
+let g:auto_save = 1    " Autosave the files
+let g:auto_save_in_insert_mode = 0   "Do not save while in insert mode
 
 " ---------------
 " Text Format
@@ -337,6 +346,19 @@ noremap <leader>ss :call StripWhitespace()<CR>
 " Save a file as root (,W)
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
+" ---------------
+" Write Buffer if Necessary
+"
+" Writes the current buffer if it's needed, unless we're the in QuickFix mode.
+" ---------------
+
+function WriteBufferIfNecessary()
+  if &modified && !&readonly
+    :write
+  endif
+endfunction
+command! WriteBufferIfNecessary call WriteBufferIfNecessary()
+
 " Automatic commands
 if has("autocmd")
 	" Enable file type detection
@@ -353,4 +375,45 @@ if exists("&relativenumber")
 	au BufReadPost * set relativenumber
 endif
 
+" ---------------
+" Python-mode
+" ---------------
 
+" Activate rope
+" Keys
+" K             Show python docs
+" <Ctrl-Space>  Rope autocomplete
+" <Ctrl-c>g     Rope goto definition
+" <Ctrl-c>d     Rope show documentation
+" <Ctrl-c>f     Rope find occurrences
+" <Leader>b     Set, unset breakpoint (g:pymode_breakpoint enabled)
+" [[            Jump on previous class or function (normal, visual, operator modes)
+" ]]            Jump on next class or function (normal, visual, operator modes)
+" [M            Jump on previous class or method (normal, visual, operator modes)
+" ]M            Jump on next class or method (normal, visual, operator modes)
+
+" Documentation
+let g:pymode_doc = 1
+let g:pymode_doc_key = 'K'
+
+"Linting
+let g:pymode_lint = 1
+let g:pymode_lint_checker = "pyflakes,pep8"
+" Auto check on save
+let g:pymode_lint_write = 1
+
+" Support virtualenv
+let g:pymode_virtualenv = 1
+
+" Enable breakpoints plugin
+let g:pymode_breakpoint = 1
+let g:pymode_breakpoint_bind = '<leader>b'
+
+" syntax highlighting
+let g:pymode_syntax = 1
+let g:pymode_syntax_all = 1
+let g:pymode_syntax_indent_errors = g:pymode_syntax_all
+let g:pymode_syntax_space_errors = g:pymode_syntax_all
+
+" Don't autofold code
+let g:pymode_folding = 0
