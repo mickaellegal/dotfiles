@@ -35,6 +35,7 @@ compinit
 bindkey -v
 bindkey -M viins 'jj' vi-cmd-mode
 bindkey '^R' history-incremental-search-backward
+export KEYTIMEOUT=1
 
 # Sourcing to other files
 source $ZSH/oh-my-zsh.sh
