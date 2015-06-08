@@ -19,8 +19,17 @@ export PATH="/usr/local/bin:/usr/local/share/python:/usr/bin:/bin:/usr/sbin:/sbi
 export PATH=~/Dropbox/.tools:$PATH
 export WORKON_HOME=$HOME/.virtualenvs
 
+# Sourcing to other files
+source $ZSH/oh-my-zsh.sh
+source /usr/local/bin/virtualenvwrapper.sh
+source $HOME/.aliases
+source $HOME/.functions
+source $HOME/.exports
+
 # Setting my default editor to vim
-export EDITOR=vim
+export EDITOR="vim"
+export USE_EDITOR=$EDITOR
+export VISUAL=$EDITOR
 
 # Save a ton of history
 HISTSIZE=10000
@@ -31,21 +40,28 @@ SAVEHIST=10000
 autoload -U compinit
 compinit
 
-# Bind keys to use vim mode in shell
+# terminal vim
 bindkey -v
-bindkey -M viins 'jj' vi-cmd-mode
-bindkey '^R' history-incremental-search-backward
 export KEYTIMEOUT=1
+bindkey -M viins 'jj' vi-cmd-mode
+bindkey -M viins '^k' kill-line
+bindkey '^?' backward-delete-char
+bindkey '^h' backward-delete-char
+bindkey '^w' backward-kill-word
+bindkey '^r' history-incremental-search-backward
 
-# Sourcing to other files
-source $ZSH/oh-my-zsh.sh
-source /usr/local/bin/virtualenvwrapper.sh
-source $HOME/.aliases
-source $HOME/.functions
-source $HOME/.exports
+function zle-line-init zle-keymap-select {
+    VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]%  %{$reset_color%}"
+    RPS1="${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/}"
+    RPS2=$RPS1
+    zle reset-prompt
+}
 
-# Getting the names of the columns in a csv file (comma as separator)
-names () {sed -e 's/,/\
-/g;q'}
+zle -N zle-line-init
+zle -N zle-keymap-select
 
-function gvim { /Applications/MacVim.app/Contents/MacOS/Vim -g $*; }
+# # Getting the names of the columns in a csv file (comma as separator)
+# names () {sed -e 's/,/\
+# /g;q'}
+#
+# function gvim { /Applications/MacVim.app/Contents/MacOS/Vim -g $*; }

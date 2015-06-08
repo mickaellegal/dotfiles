@@ -29,9 +29,11 @@ Plugin 'garbas/vim-snipmate'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'honza/vim-snippets'
 Plugin 'mileszs/ack.vim'
-Plugin 'klen/python-mode'
+Plugin 'TFenby/python-mode', { 'branch' : 'develop' }
+" Plugin 'klen/python-mode'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'scrooloose/nerdtree'
 
 " Colors
 Plugin 'nanotech/jellybeans.vim'
@@ -92,11 +94,6 @@ nnoremap U <C-r>
 " ---------------
 " Window Movement
 " ---------------
-" nnoremap <silent> gh :WriteBufferIfNecessary<CR>:wincmd h<CR>
-" nnoremap <silent> gj :WriteBufferIfNecessary<CR>:wincmd j<CR>
-" nnoremap <silent> gk :WriteBufferIfNecessary<CR>:wincmd k<CR>
-" nnoremap <silent> <M-k> :wincmd k<CR>
-" nnoremap <silent> gl :WriteBufferIfNecessary<CR>:wincmd l<CR>
 
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>

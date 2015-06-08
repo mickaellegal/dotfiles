@@ -25,6 +25,12 @@ alias vim='mvim -v'
 alias zh='vim ~/.zshrc'
 alias vimrc='vim ~/.vimrc'
 
+# Tmux shortcuts
+alias ta='tmux attach -t'
+alias tnew='tmux new -s'
+alias tls='tmux ls'
+alias tkill='tmux kill-session -t'
+alias tconf='vim ~/.tmux.conf'
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
