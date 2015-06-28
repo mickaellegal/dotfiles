@@ -13,7 +13,6 @@ Plugin 'gmarik/Vundle.vim'
 
 " My bundles
 Plugin 'ervandew/supertab'
-Plugin 'skwp/greplace.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
@@ -24,16 +23,15 @@ Plugin 'tomtom/tcomment_vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim'
+" Plugin 'tomtom/tlib_vim'
 Plugin 'garbas/vim-snipmate'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'honza/vim-snippets'
-Plugin 'mileszs/ack.vim'
-Plugin 'TFenby/python-mode', { 'branch' : 'develop' }
-" Plugin 'klen/python-mode'
+Plugin 'klen/python-mode'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'scrooloose/nerdtree'
+Plugin 'rking/ag.vim'
 
 " Colors
 Plugin 'nanotech/jellybeans.vim'
@@ -326,7 +324,10 @@ set complete=.,w,b,u,U
 " ---------------------------------------------
 " Additional Useful commands
 " ---------------------------------------------
+map <leader>t :NERDTreeToggle<CR>
+let NERDTreeIgnore = ['\.pyc$']
 
+let g:jedi#completions_command = "<leader>m"
 " ---------------
 " Commands
 " ---------------
@@ -342,6 +343,18 @@ endfunction
 noremap <leader>ss :call StripWhitespace()<CR>
 " Save a file as root (,W)
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
+
+" The Silver Searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+endif
 
 " ---------------
 " Write Buffer if Necessary
@@ -414,3 +427,6 @@ let g:pymode_syntax_space_errors = g:pymode_syntax_all
 
 " Don't autofold code
 let g:pymode_folding = 0
+
+" Do not autoimport
+let g:pymode_rope_autoimport = 0
